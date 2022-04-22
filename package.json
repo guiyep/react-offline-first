@@ -1,0 +1,123 @@
+{
+  "name": "offline-react",
+  "version": "0.0.1",
+  "description": "a library that will help you build react apps that works 100% offline",
+  "author": "guiyep",
+  "license": "MIT",
+  "repository": "guiyep/offline-react",
+  "main": "dist/index.min.js",
+  "engines": {
+    "node": ">=9",
+    "npm": ">=6"
+  },
+  "keywords": [
+    "react",
+    "context",
+    "performance",
+    "hooks",
+    "bind",
+    "state",
+    "data"
+  ],
+  "scripts": {
+    "test": "jest --env=jsdom",
+    "build": "rollup -c",
+    "build-prod": "NODE_ENV=production BABEL_ENV=production rollup -c",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "eslint": "eslint --fix",
+    "prettier": "prettier --write",
+    "eslint2": "eslint",
+    "prettier2": "prettier",
+    "lint": "yarn run eslint ./src && yarn run prettier ./src",
+    "lint-s": "lint-staged"
+  },
+  "devDependencies": {
+    "@babel/core": "7.16.0",
+    "@babel/plugin-transform-runtime": "7.16.4",
+    "@babel/preset-env": "^7.16.4",
+    "@babel/preset-react": "^7.16.0",
+    "@storybook/addon-actions": "^6.4.4",
+    "@storybook/addon-essentials": "^6.4.4",
+    "@storybook/addon-links": "^6.4.4",
+    "@storybook/react": "^6.4.4",
+    "@testing-library/jest-dom": "^5.15.1",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/react-hooks": "^7.0.2",
+    "@types/jest": "^27.4.1",
+    "@typescript-eslint/eslint-plugin": "^5.20.0",
+    "@typescript-eslint/parser": "^5.20.0",
+    "babel-eslint": "10.1.0",
+    "babel-jest": "^27.5.1",
+    "babel-loader": "8.2.3",
+    "babel-plugin-rewire": "^1.2.0",
+    "babel-plugin-transform-react-remove-prop-types": "0.4.24",
+    "babel-preset-minify": "0.5.1",
+    "core-js": "3.19.2",
+    "eslint": "^8.4.1",
+    "eslint-config-airbnb": "19.0.1",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-config-standard": "16.0.3",
+    "eslint-config-standard-react": "11.0.1",
+    "eslint-plugin-import": "2.25.3",
+    "eslint-plugin-jest": "^26.1.4",
+    "eslint-plugin-jsx-a11y": "6.5.1",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-promise": "5.1.1",
+    "eslint-plugin-react": "7.27.1",
+    "eslint-plugin-react-hooks": "4.3.0",
+    "eslint-plugin-standard": "5.0.0",
+    "fake-indexeddb": "^3.1.7",
+    "husky": "7.0.1",
+    "jest": "^27.4.2",
+    "lint-staged": "11.0.0",
+    "postcss": "^8.3.9",
+    "prettier": "2.3.2",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-test-renderer": "^17.0.2",
+    "react-testing-library": "8.0.1",
+    "rollup": "2.60.2",
+    "rollup-plugin-babel": "4.4.0",
+    "rollup-plugin-babel-minify": "10.0.0",
+    "rollup-plugin-cleaner": "1.0.0",
+    "rollup-plugin-commonjs": "10.1.0",
+    "rollup-plugin-gzip": "3.0.0",
+    "rollup-plugin-json": "4.0.0",
+    "rollup-plugin-node-resolve": "5.2.0",
+    "rollup-plugin-peer-deps-external": "2.2.4",
+    "rollup-plugin-replace": "2.2.0",
+    "rollup-plugin-terser": "7.0.2",
+    "ts-jest": "^27.1.4",
+    "tslint-config-airbnb": "^5.11.2",
+    "typescript": "^4.6.3"
+  },
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
+  },
+  "dependencies": {},
+  "browserslist": [
+    "last 2 versions",
+    "not ie <= 11",
+    "not opera >= 0",
+    "not opera >= 0",
+    "not ie <= 11"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn test && lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "yarn run prettier",
+      "yarn run eslint"
+    ]
+  }
+}
