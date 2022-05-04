@@ -1,6 +1,5 @@
-import 'fake-indexeddb/auto';
-import FDBFactory from 'fake-indexeddb/lib/FDBFactory';
 import { storage } from './index';
+import { mockIndexedDb } from '../mocks/indexeddb';
 import { DbItemNotFound } from './errors';
 
 type Value = {
@@ -11,9 +10,7 @@ const value: Value = { a: 222 };
 
 describe('storage', () => {
   beforeEach(() => {
-    /* eslint-disable */
-    window.indexedDB = new FDBFactory();
-    /* eslint-enable */
+    mockIndexedDb();
   });
 
   test('defined', () => {
@@ -83,5 +80,91 @@ describe('storage', () => {
         "a": 333,
       }
     `);
+  });
+
+  test('get first item', async () => {
+    const db = storage<Value>({ name: 'test' });
+    await db.set({ key: 'key', value });
+    await db.set({
+      key: 'key2',
+      value: {
+        a: 333,
+      },
+    });
+    await db.set({
+      key: 'key3',
+      value: {
+        a: 555,
+      },
+    });
+    const result = await db.getFirst();
+    expect(result).toMatchInlineSnapshot(`
+      Object {
+        "a": 222,
+      }
+    `);
+  });
+
+  test('delete first item', async () => {
+    const db = storage<Value>({ name: 'test' });
+    await db.set({ key: 'key', value });
+    await db.set({
+      key: 'key2',
+      value: {
+        a: 333,
+      },
+    });
+    await db.set({
+      key: 'key3',
+      value: {
+        a: 555,
+      },
+    });
+    await db.deleteFirst();
+    const first = await db.getFirst();
+    expect(first).toMatchInlineSnapshot(`
+      Object {
+        "a": 333,
+      }
+    `);
+  });
+
+  test('get first item from no items', async () => {
+    const db = storage<Value>({ name: 'test' });
+    const result = await db.getFirst();
+    expect(result).toEqual(null);
+  });
+
+  test('check if we have something', async () => {
+    const db = storage<Value>({ name: 'test' });
+    await db.set({ key: 'key', value });
+    await db.set({
+      key: 'key2',
+      value: {
+        a: 333,
+      },
+    });
+    await db.set({
+      key: 'key3',
+      value: {
+        a: 555,
+      },
+    });
+    const result = await db.hasAny();
+    expect(result).toEqual(true);
+  });
+
+  test('check if has something is false', async () => {
+    const db = storage<Value>({ name: 'test' });
+    const result = await db.hasAny();
+    expect(result).toEqual(false);
+  });
+
+  test('2 instances same name to access the same data', async () => {
+    const db = storage<Value>({ name: 'test' });
+    const db2 = storage<Value>({ name: 'test' });
+    await db.set({ key: 'key', value });
+    const result = await db2.hasAny();
+    expect(result).toEqual(true);
   });
 });
