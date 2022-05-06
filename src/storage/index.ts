@@ -13,8 +13,7 @@ export const get = async <T>({ key }: KeyProp, Store: Store<T>): Promise<T> => {
   return result.data;
 };
 
-export const deleteItem = async <T>({ key }: KeyProp, Store: Store<T>): Promise<void> =>
-  Store.deleteItem(key)
+export const deleteItem = async <T>({ key }: KeyProp, Store: Store<T>): Promise<void> => Store.deleteItem(key);
 
 export const set = <T>({ key, value }: KeyValueProp<T>, Store: Store<T>): Promise<unknown> =>
   Store.setItem(key, { timestamp: +new Date(), data: value });
@@ -30,26 +29,26 @@ export const find = async <T>(condition: ConditionProp<T>, Store: Store<T>): Pro
   return result;
 };
 
-export const getFirst = async <T>(Store: Store<T>): Promise<T | null> => {
+export const getFirst = async <T>(count: number, Store: Store<T>): Promise<T | null> => {
   let result: T | null = null;
 
   await Store.iterate(({ data }, index, breakLoop) => {
-    if (index === 0) {
+    if (index === count - 1) {
       result = data;
-      breakLoop()
+      breakLoop();
     }
   });
 
   return result;
 };
 
-export const deleteFirst = async <T>(Store: Store<T>): Promise<void> => {
+export const deleteFirst = async <T>(count: number, Store: Store<T>): Promise<void> => {
   let result: string | null = null;
 
   await Store.iterate(({ key }, index, breakLoop) => {
-    if (index === 0) {
+    if (index === count - 1) {
       result = key;
-      breakLoop()
+      breakLoop();
     }
   });
 
@@ -60,12 +59,12 @@ export const deleteFirst = async <T>(Store: Store<T>): Promise<void> => {
   return Promise.reject();
 };
 
-export const hasAny = async<T>(Store: Store<T>): Promise<boolean> => {
-  if (await getFirst(Store) !== null) {
+export const hasAny = async <T>(Store: Store<T>): Promise<boolean> => {
+  if ((await getFirst(1, Store)) !== null) {
     return true;
   }
   return false;
-}
+};
 
 export const storage = <T>({ name }: NameProp): Storage<T> => {
   const Store = createStore<T>({ name });
@@ -74,8 +73,8 @@ export const storage = <T>({ name }: NameProp): Storage<T> => {
     set: ({ key, value }) => set({ key, value }, Store),
     delete: ({ key }) => deleteItem({ key }, Store),
     find: (condition) => find(condition, Store),
-    getFirst: () => getFirst(Store),
-    deleteFirst: () => deleteFirst(Store),
+    getFirst: (count: number) => getFirst(count, Store),
+    deleteFirst: (count: number) => deleteFirst(count, Store),
     hasAny: () => hasAny(Store),
   };
 };

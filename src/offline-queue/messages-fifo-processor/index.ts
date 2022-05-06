@@ -1,8 +1,11 @@
 import type { MessagesFifoProcessorConfig, MessagesFifoProcessorProps } from './types';
 
-export const messagesFifoProcessor = async <T>(props: MessagesFifoProcessorProps<T>, config: MessagesFifoProcessorConfig): Promise<void> => {
+export const messagesFifoProcessor = async <T>(
+  props: MessagesFifoProcessorProps<T>,
+  config: MessagesFifoProcessorConfig,
+): Promise<void> => {
   const { getMessage, deleteMessage, moveToDlqMessage, executeMessage } = props;
-  const { failTimes, remainingTimes: remainingTimesConfig, signal } = config;
+  const { failTimes, remainingTimes: remainingTimesConfig, signal, concurrency } = config;
 
   let remainingTimes = remainingTimesConfig === undefined ? failTimes : remainingTimesConfig;
 
@@ -25,6 +28,7 @@ export const messagesFifoProcessor = async <T>(props: MessagesFifoProcessorProps
       failTimes,
       remainingTimes: failTimes,
       signal,
+      concurrency,
     });
   } catch {
     if (remainingTimesConfig === 1) {
@@ -39,6 +43,7 @@ export const messagesFifoProcessor = async <T>(props: MessagesFifoProcessorProps
       failTimes,
       remainingTimes: remainingTimes - 1,
       signal,
+      concurrency,
     });
   }
 };

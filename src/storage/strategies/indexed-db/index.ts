@@ -93,18 +93,17 @@ export const iterate = async <T>(f: IterateFunction<T>, store: InternalStore): P
     return objectStore.getAll();
   }, store);
 
-  const thisList = (list || []);
+  const thisList = list || [];
   let breakLoop = false;
 
   const breakLoopFunction = () => {
     breakLoop = true;
-  }
+  };
 
   for (let i = 0; i < thisList.length; i++) {
     if (breakLoop === false) {
       f(list[i], i, breakLoopFunction);
-    }
-    else {
+    } else {
       break;
     }
   }

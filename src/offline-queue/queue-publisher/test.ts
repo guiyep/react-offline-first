@@ -3,8 +3,8 @@ import { mockIndexedDb } from '../../mocks/indexeddb';
 import { queueBuilder } from '../queue-builder';
 
 type Value = {
-  test: number
-}
+  test: number;
+};
 
 const value: Value = { test: 123 };
 
@@ -15,13 +15,13 @@ describe('queuePublisher', () => {
 
   test('to be defined', () => {
     expect(queuePublisher).toBeDefined();
-  })
+  });
 
   test('to publish message', async () => {
-    const topicQueueStorage = queueBuilder<Value>('test')
-    const publishMessage = queuePublisher<Value>(topicQueueStorage)
+    const topicQueueStorage = queueBuilder<Value>('test');
+    const publishMessage = queuePublisher<Value>(topicQueueStorage);
     await publishMessage(value);
-    const first = await topicQueueStorage.queueStorage.storage.getFirst()
+    const first = await topicQueueStorage.queueStorage.storage.getFirst();
     expect(first).toEqual(value);
-  })
-})
+  });
+});

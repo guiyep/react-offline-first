@@ -6,13 +6,20 @@ import type { QueueFifoPollerConfig } from './types';
 
 const defaultConfig: MessagesPollerConfig = {
   interval: 5000,
-  failTimes: 5
-}
+  failTimes: 5,
+};
 
-export const queueFifoPoller = <T>(queue: QueueBuilderObject<T>, config?: QueueFifoPollerConfig) => (executeMessage: ExecuteMessage<T>): MessagesPollerUnregister => messagesPoller({
-  getMessage: () => queue.queueStorage.storage.getFirst(),
-  hasMessages: () => queue.queueStorage.storage.hasAny(),
-  executeMessage,
-  deleteMessage: () => queue.queueStorage.storage.deleteFirst(),
-  moveToDlqMessage: (data) => queue.queueStorage.storageDlq.set({ key: '222', value: data })
-}, Object.assign({}, defaultConfig, config || {}), messagesFifoProcessor)
+export const queueFifoPoller =
+  <T>(queue: QueueBuilderObject<T>, config?: QueueFifoPollerConfig) =>
+  (executeMessage: ExecuteMessage<T>): MessagesPollerUnregister =>
+    messagesPoller(
+      {
+        getMessage: () => queue.queueStorage.storage.getFirst(config?.concurrency || 1),
+        hasMessages: () => queue.queueStorage.storage.hasAny(),
+        executeMessage,
+        deleteMessage: () => queue.queueStorage.storage.deleteFirst(config?.concurrency || 1),
+        moveToDlqMessage: (data) => queue.queueStorage.storageDlq.set({ key: '222', value: data }),
+      },
+      Object.assign({}, defaultConfig, config || {}),
+      messagesFifoProcessor,
+    );

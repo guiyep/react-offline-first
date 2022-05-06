@@ -22,9 +22,9 @@ export type Storage<T> = {
   delete: (props: KeyProp) => Promise<void>;
   set: (props: KeyValueProp<T>) => Promise<unknown>;
   find: (condition: ConditionProp<T>) => Promise<T[]>;
-  getFirst: () => Promise<T | null>;
-  deleteFirst: () => Promise<void>;
-  hasAny: () => Promise<boolean>
+  getFirst: (count: number) => Promise<T | null>;
+  deleteFirst: (count: number) => Promise<void>;
+  hasAny: () => Promise<boolean>;
 };
 
 export type IterateFunction<T> = (value: InternalData<T>, index: number, breakLoop: () => void) => void;
@@ -36,4 +36,4 @@ export type Store<T> = {
   iterate: (condition: IterateFunction<T>) => Promise<void>;
 };
 
-export type StorageService = <T>({ name }: NameProp) => Storage<T>
+export type StorageService = <T>({ name }: NameProp) => Storage<T>;

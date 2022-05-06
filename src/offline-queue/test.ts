@@ -5,5 +5,5 @@ describe('offline queue exports', () => {
     expect(queueBuilder).toBeDefined();
     expect(queuePublisher).toBeDefined();
     expect(queueFifoPoller).toBeDefined();
-  })
-})
+  });
+});

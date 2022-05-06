@@ -5,4 +5,4 @@ export const mockIndexedDb = () => {
   /* eslint-disable */
   window.indexedDB = new FDBFactory();
   /* eslint-enable */
-}
+};

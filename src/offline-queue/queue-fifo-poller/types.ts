@@ -1,5 +1,5 @@
-
 export type QueueFifoPollerConfig = {
-  failTimes?: number,
-  interval?: number
-}
+  failTimes?: number;
+  interval?: number;
+  concurrency: number;
+};

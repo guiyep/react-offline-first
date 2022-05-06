@@ -3,5 +3,5 @@ import type { MessagesPollerProps, IMessageProcessorConfig } from '../messages-p
 export type MessagesFifoProcessorProps<T> = MessagesPollerProps<T>;
 
 export interface MessagesFifoProcessorConfig extends IMessageProcessorConfig {
-  remainingTimes?: number,
+  remainingTimes?: number;
 }
