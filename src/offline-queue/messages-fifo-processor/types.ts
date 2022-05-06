@@ -1,7 +1,7 @@
-import type { MessagesPollerProps, MessageProcessorConfig } from '../messages-poller/types';
+import type { MessagesPollerProps, IMessageProcessorConfig } from '../messages-poller/types';
 
 export type MessagesFifoProcessorProps<T> = MessagesPollerProps<T>;
 
-export type MessagesFifoProcessorConfig = MessageProcessorConfig & {
+export interface MessagesFifoProcessorConfig extends IMessageProcessorConfig {
   remainingTimes?: number,
 }

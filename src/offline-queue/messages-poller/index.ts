@@ -2,7 +2,7 @@ import type { MessagesPollerProps, MessagesPollerConfig, MessagesPollerUnregiste
 
 export const messagesPoller = <T>(props: MessagesPollerProps<T>, config: MessagesPollerConfig, messageProcessor: MessageProcessor): MessagesPollerUnregister => {
   const { hasMessages } = props;
-  const { failTimes, timeout } = config;
+  const { failTimes, interval } = config;
 
   const controller = new AbortController();
   const signal = controller.signal;
@@ -21,7 +21,7 @@ export const messagesPoller = <T>(props: MessagesPollerProps<T>, config: Message
     }
 
     return messagesPoller(props, config, messageProcessor);
-  }, timeout);
+  }, interval);
 
 
   return () => controller.abort();

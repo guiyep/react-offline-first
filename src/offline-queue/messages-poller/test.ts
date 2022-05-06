@@ -13,7 +13,7 @@ const awaitFor = (timeInMs: number): Promise<void> => new Promise((resolve) => {
 
 const config: MessagesPollerConfig = {
   failTimes: 5,
-  timeout: 30,
+  interval: 30,
 }
 
 describe('messagesPoller', () => {
