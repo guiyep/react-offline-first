@@ -7,24 +7,24 @@ export const messagesFifoProcessor = async <T>(
   const { getMessage, deleteMessage, moveToDlqMessage, executeMessage } = props;
   const { failTimes, remainingTimes: remainingTimesConfig, signal, concurrency } = config;
 
-  let remainingTimes = remainingTimesConfig === undefined ? failTimes : remainingTimesConfig;
+  const remainingTimes = remainingTimesConfig === undefined ? failTimes : remainingTimesConfig;
 
   let message;
   try {
     message = await getMessage();
 
     if (signal.aborted) {
-      return Promise.reject();
+      return await Promise.reject();
     }
 
     if (message === null) {
-      return Promise.resolve();
+      return await Promise.resolve();
     }
 
     await executeMessage(message);
     await deleteMessage();
 
-    return messagesFifoProcessor(props, {
+    return await messagesFifoProcessor(props, {
       failTimes,
       remainingTimes: failTimes,
       signal,

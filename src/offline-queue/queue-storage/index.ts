@@ -4,6 +4,7 @@ import type { Storage } from '../../storage/types';
 
 export class QueueStorage<T> implements IQueueStorage<T> {
   storage: Storage<T>;
+
   storageDlq: Storage<T>;
 
   constructor(topic: string) {

@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
+import { v4 as uuidv4 } from 'uuid';
 import { queueFifoPoller } from './index';
 import { queueBuilder } from '../queue-builder';
 import { mockIndexedDb } from '../../mocks/indexeddb';
 import { awaitFor } from '../../mocks/await-for';
-import { v4 as uuidv4 } from 'uuid';
 
 type Value = {
   test: string;
@@ -78,7 +79,7 @@ describe('queueFifoPoller', () => {
           },
         });
       }
-      addIndex = addIndex + 1;
+      addIndex += 1;
       if (addIndex === 5) {
         clearInterval(intervalId);
       }

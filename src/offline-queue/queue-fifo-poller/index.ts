@@ -20,6 +20,6 @@ export const queueFifoPoller =
         deleteMessage: () => queue.queueStorage.storage.deleteFirst(config?.concurrency || 1),
         moveToDlqMessage: (data) => queue.queueStorage.storageDlq.set({ key: '222', value: data }),
       },
-      Object.assign({}, defaultConfig, config || {}),
+      { ...defaultConfig, ...(config || {}) },
       messagesFifoProcessor,
     );

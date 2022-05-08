@@ -13,9 +13,9 @@ export const messagesPoller = <T>(
 
   const configProcess = { failTimes, signal, concurrency };
 
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   const timeoutId = setTimeout(async () => {
     if (signal.aborted) {
-      console.log('aborted');
       clearTimeout(timeoutId);
       return;
     }
@@ -24,7 +24,7 @@ export const messagesPoller = <T>(
       await messageProcessor(props, configProcess);
     }
 
-    return messagesPoller(props, config, messageProcessor);
+    messagesPoller(props, config, messageProcessor);
   }, interval);
 
   return () => controller.abort();

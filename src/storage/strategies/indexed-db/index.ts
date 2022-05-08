@@ -67,7 +67,7 @@ export const setItem = async <T>(data: InternalData<T>, store: InternalStore): P
   return putInternal(data, store);
 };
 
-export const deleteItem = async <T>(key: string, store: InternalStore): Promise<void> =>
+export const deleteItem = async (key: string, store: InternalStore): Promise<void> =>
   asDbPromise<void>(() => {
     const { db, name } = store;
 

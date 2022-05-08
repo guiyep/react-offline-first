@@ -69,7 +69,7 @@ describe('messagesFifoProcessor', () => {
     const value2: Value = { test: 333 };
     const value3: Value = { test: 444 };
 
-    let queue: Value[] = [value, value2, value3];
+    const queue: Value[] = [value, value2, value3];
 
     const props: MessagesFifoProcessorProps<Value> = {
       hasMessages: jest.fn().mockImplementation(async () => {
@@ -183,7 +183,7 @@ describe('messagesFifoProcessor', () => {
   test('to retry message max of times and move to DLQ and keep processing messages', async () => {
     const value: Value = { test: 222 };
     const value2: Value = { test: 333 };
-    let queue: Value[] = [value, value2];
+    const queue: Value[] = [value, value2];
 
     const props: MessagesFifoProcessorProps<Value> = {
       hasMessages: jest.fn().mockImplementation(async () => {

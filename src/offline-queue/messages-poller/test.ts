@@ -41,6 +41,7 @@ describe('messagesPoller', () => {
     expect(messagesProcessor).toHaveBeenCalledTimes(1);
     expect(messagesProcessor).toHaveBeenCalledWith(props, {
       failTimes: config.failTimes,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       signal: expect.anything(),
     });
   });
