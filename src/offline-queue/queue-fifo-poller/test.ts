@@ -20,7 +20,7 @@ describe('queueFifoPoller', () => {
 
   test('to process messages', async () => {
     const queue = queueBuilder<Value>('test');
-    const queueHandler = queueFifoPoller(queue, { interval: 20, failTimes: 5 });
+    const queueHandler = queueFifoPoller(queue, { interval: 20, failTimes: 5, concurrency: 1 });
 
     queue.queueStorage.storage.set({
       key: 'first',
@@ -66,7 +66,7 @@ describe('queueFifoPoller', () => {
 
   test('to process messages while we add more', async () => {
     const queue = queueBuilder<Value>('test');
-    const queueHandler = queueFifoPoller(queue, { interval: 200, failTimes: 5 });
+    const queueHandler = queueFifoPoller(queue, { interval: 200, failTimes: 5, concurrency: 1 });
     let addIndex = 1;
 
     const intervalId = setInterval(() => {
