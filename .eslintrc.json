@@ -32,13 +32,16 @@
         "printWidth": 120,
         "singleQuote": true,
         "trailingComma": "all",
-        "arrowParens": "always"
+        "arrowParens": "always",
+        "tabWidth": 2,
+        "useTabs": false
       }
     ],
-    "eol-last": ["error", "always"],
+
     "import/prefer-default-export": "off",
     "import/no-unresolved": "off",
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+
     "react/destructuring-assignment": "off",
     "react/forbid-prop-types": "off",
     "react/jsx-wrap-multilines": "off",
@@ -46,14 +49,17 @@
     "react/no-array-index-key": "off",
     "react/jsx-one-expression-per-line": "off",
     "react/prop-types": [2, { "skipUndeclared": true }],
-    "jsx-a11y/click-events-have-key-events": "off",
-    "no-use-before-define": "off",
-    "prefer-destructuring": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "error",
-    "jest/no-conditional-expect": "off",
+
+    "no-use-before-define": "off",
+    "prefer-destructuring": "off",
+    "eol-last": ["error", "always"],
     "indent": "off",
     "no-plusplus": "off",
+
+    "jest/no-conditional-expect": "off",
+
     "@typescript-eslint/indent": ["off"],
     "@typescript-eslint/no-explicit-any": "off"
   },
