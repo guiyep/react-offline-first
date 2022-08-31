@@ -14,10 +14,10 @@ export const queueFifoPoller =
   (executeMessage: ExecuteMessage<T>): MessagesPollerUnregister =>
     messagesPoller(
       {
-        getMessage: () => queue.queueStorage.storage.getFirst(config?.concurrency || 1),
+        getMessage: () => queue.queueStorage.storage.getFirst(),
         hasMessages: () => queue.queueStorage.storage.hasAny(),
         executeMessage,
-        deleteMessage: () => queue.queueStorage.storage.deleteFirst(config?.concurrency || 1),
+        deleteMessage: () => queue.queueStorage.storage.deleteFirst(),
         moveToDlqMessage: (data) => queue.queueStorage.storageDlq.set({ key: '222', value: data }),
       },
       { ...defaultConfig, ...(config || {}) },

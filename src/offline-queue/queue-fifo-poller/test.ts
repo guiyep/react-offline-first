@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
-import { v4 as uuidv4 } from 'uuid';
+import { nanoid } from 'nanoid';
 import { queueFifoPoller } from './index';
 import { queueBuilder } from '../queue-builder';
 import { mockIndexedDb } from '../../mocks/indexeddb';
@@ -20,7 +20,7 @@ describe('queueFifoPoller', () => {
 
   test('to process messages', async () => {
     const queue = queueBuilder<Value>('test');
-    const queueHandler = queueFifoPoller(queue, { interval: 20, failTimes: 5, concurrency: 1 });
+    const queueHandler = queueFifoPoller(queue, { interval: 20, failTimes: 5 });
 
     queue.queueStorage.storage.set({
       key: 'first',
@@ -52,13 +52,13 @@ describe('queueFifoPoller', () => {
     expect(executorMock).toHaveBeenCalledTimes(3);
 
     expect(executorMock).toHaveBeenNthCalledWith(1, {
-      test: 1,
+      test: '1',
     });
     expect(executorMock).toHaveBeenNthCalledWith(2, {
-      test: 2,
+      test: '2',
     });
     expect(executorMock).toHaveBeenNthCalledWith(3, {
-      test: 3,
+      test: '3',
     });
 
     expect(await queue.queueStorage.storage.hasAny()).toBe(false);
@@ -66,12 +66,12 @@ describe('queueFifoPoller', () => {
 
   test('to process messages while we add more', async () => {
     const queue = queueBuilder<Value>('test');
-    const queueHandler = queueFifoPoller(queue, { interval: 200, failTimes: 5, concurrency: 1 });
+    const queueHandler = queueFifoPoller(queue, { interval: 200, failTimes: 5 });
     let addIndex = 1;
 
     const intervalId = setInterval(() => {
       for (let i = 0; i < 20; i++) {
-        const key = uuidv4();
+        const key = nanoid();
         queue.queueStorage.storage.set({
           key,
           value: {

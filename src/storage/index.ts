@@ -1,7 +1,7 @@
 import { createInstance } from './strategies/indexed-db';
 import { DbItemNotFound } from './errors';
 
-import type { KeyProp, KeyValueProp, NameProp, Storage, ConditionProp, Store } from './types';
+import type { KeyProp, KeyValuePair, NameProp, Storage, ConditionProp, Store } from './types';
 
 export const createStore = <T>({ name }: NameProp): Store<T> => createInstance({ name });
 
@@ -15,7 +15,7 @@ export const get = async <T>({ key }: KeyProp, Store: Store<T>): Promise<T> => {
 
 export const deleteItem = async <T>({ key }: KeyProp, Store: Store<T>): Promise<void> => Store.deleteItem(key);
 
-export const set = <T>({ key, value }: KeyValueProp<T>, Store: Store<T>): Promise<unknown> =>
+export const set = <T>({ key, value }: KeyValuePair<T>, Store: Store<T>): Promise<unknown> =>
   Store.setItem(key, { timestamp: +new Date(), data: value });
 
 export const find = async <T>(condition: ConditionProp<T>, Store: Store<T>): Promise<T[]> => {
@@ -29,12 +29,13 @@ export const find = async <T>(condition: ConditionProp<T>, Store: Store<T>): Pro
   return result;
 };
 
-export const getFirst = async <T>(count: number, Store: Store<T>): Promise<T | null> => {
+export const getFirst = async <T>(Store: Store<T>): Promise<T | null> => {
   let result: T | null = null;
 
   await Store.iterate(({ data }, index, breakLoop) => {
-    if (index === count - 1) {
+    if (index === 0) {
       result = data;
+    } else {
       breakLoop();
     }
   });
@@ -42,11 +43,30 @@ export const getFirst = async <T>(count: number, Store: Store<T>): Promise<T | n
   return result;
 };
 
-export const deleteFirst = async <T>(count: number, Store: Store<T>): Promise<void> => {
+export const getTopKeyValuePair = async <T>(Store: Store<T>): Promise<KeyValuePair<T>[] | null> => {
+  const result: KeyValuePair<T>[] = [];
+
+  await Store.iterate(({ data, key }, index, breakLoop) => {
+    if (index <= 1) {
+      const keyValuePair: KeyValuePair<T> = {
+        value: data,
+        key,
+      };
+
+      result.push(keyValuePair);
+    } else {
+      breakLoop();
+    }
+  });
+
+  return result.length > 0 ? result : null;
+};
+
+export const deleteFirst = async <T>(Store: Store<T>): Promise<void> => {
   let result: string | null = null;
 
   await Store.iterate(({ key }, index, breakLoop) => {
-    if (index === count - 1) {
+    if (index === 0) {
       result = key;
       breakLoop();
     }
@@ -60,7 +80,7 @@ export const deleteFirst = async <T>(count: number, Store: Store<T>): Promise<vo
 };
 
 export const hasAny = async <T>(Store: Store<T>): Promise<boolean> => {
-  if ((await getFirst(1, Store)) !== null) {
+  if ((await getFirst(Store)) !== null) {
     return true;
   }
   return false;
@@ -73,8 +93,8 @@ export const storage = <T>({ name }: NameProp): Storage<T> => {
     set: ({ key, value }) => set({ key, value }, Store),
     delete: ({ key }) => deleteItem({ key }, Store),
     find: (condition) => find(condition, Store),
-    getFirst: (count: number) => getFirst(count, Store),
-    deleteFirst: (count: number) => deleteFirst(count, Store),
+    getFirst: () => getFirst(Store),
+    deleteFirst: () => deleteFirst(Store),
     hasAny: () => hasAny(Store),
   };
 };

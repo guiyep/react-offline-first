@@ -11,14 +11,12 @@ export type MessagesPollerProps<T> = {
 export type MessagesPollerConfig = {
   failTimes: number;
   interval: number;
-  concurrency?: number;
 };
 
 export type MessagesPollerUnregister = () => void;
 export interface IMessageProcessorConfig {
   failTimes: number;
   signal: AbortSignal;
-  concurrency: number;
 }
 
 export type MessageProcessor = <T>(props: MessagesPollerProps<T>, config: IMessageProcessorConfig) => Promise<void>;

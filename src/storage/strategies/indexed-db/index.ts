@@ -80,33 +80,72 @@ export const deleteItem = async (key: string, store: InternalStore): Promise<voi
     return objectStore.delete(key);
   }, store);
 
+// export const iterate = async <T>(f: IterateFunction<T>, store: InternalStore): Promise<void> => {
+//   const list = await asDbPromise<InternalData<T>[]>(() => {
+//     const { db, name } = store;
+
+//     if (!db) {
+//       throw new DbNotFound();
+//     }
+
+//     const readTransaction = db.transaction([name]);
+//     const objectStore = readTransaction.objectStore(name);
+//     return objectStore.getAll();
+//   }, store);
+
+//   const thisList = list || [];
+//   let breakLoop = false;
+
+//   const breakLoopFunction = () => {
+//     breakLoop = true;
+//   };
+
+//   for (let i = 0; i < thisList.length; i++) {
+//     if (breakLoop === false) {
+//       f(list[i], i, breakLoopFunction);
+//     } else {
+//       break;
+//     }
+//   }
+// };
+
 export const iterate = async <T>(f: IterateFunction<T>, store: InternalStore): Promise<void> => {
-  const list = await asDbPromise<InternalData<T>[]>(() => {
+  await store.promise;
+
+  return new Promise((resolve, reject) => {
     const { db, name } = store;
 
     if (!db) {
       throw new DbNotFound();
     }
 
-    const readTransaction = db.transaction([name]);
-    const objectStore = readTransaction.objectStore(name);
-    return objectStore.getAll();
-  }, store);
+    const trans = db.transaction([name], 'readwrite');
+    const objectStore = trans.objectStore(name);
+    const request = objectStore.openCursor();
 
-  const thisList = list || [];
-  let breakLoop = false;
+    let breakLoop = false;
+    let iterator = 0;
 
-  const breakLoopFunction = () => {
-    breakLoop = true;
-  };
+    const breakLoopFunction = () => {
+      breakLoop = true;
+    };
 
-  for (let i = 0; i < thisList.length; i++) {
-    if (breakLoop === false) {
-      f(list[i], i, breakLoopFunction);
-    } else {
-      break;
-    }
-  }
+    request.onsuccess = () => {
+      const cursor = request.result;
+      if (cursor !== undefined && cursor !== null && breakLoop === false) {
+        const result = cursor.value as InternalData<T>;
+        f(result, iterator, breakLoopFunction);
+        iterator++;
+        cursor.continue();
+      } else {
+        resolve();
+      }
+    };
+
+    request.onerror = (e) => {
+      reject(e);
+    };
+  });
 };
 
 export const createInstance = <T>({ name }: NameProp): Store<T> => {

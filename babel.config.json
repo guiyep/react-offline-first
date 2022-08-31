@@ -1,4 +1,11 @@
 {
   "presets": ["@babel/preset-env", "@babel/preset-react"],
-  "plugins": ["@babel/plugin-transform-runtime", "rewire-ts"]
+  "plugins": ["@babel/plugin-transform-runtime", "rewire-ts"],
+  "env": {
+      "testing": {
+        "presets": [
+          [ "@babel/preset-env", { "targets": { "node": "current" }}]
+        ]
+      }
+    }
 }

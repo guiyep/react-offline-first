@@ -6,12 +6,12 @@ export const messagesPoller = <T>(
   messageProcessor: MessageProcessor,
 ): MessagesPollerUnregister => {
   const { hasMessages } = props;
-  const { failTimes, interval, concurrency = 1 } = config;
+  const { failTimes, interval } = config;
 
   const controller = new AbortController();
   const signal = controller.signal;
 
-  const configProcess = { failTimes, signal, concurrency };
+  const configProcess = { failTimes, signal };
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   const timeoutId = setTimeout(async () => {

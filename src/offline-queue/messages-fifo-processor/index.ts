@@ -5,7 +5,7 @@ export const messagesFifoProcessor = async <T>(
   config: MessagesFifoProcessorConfig,
 ): Promise<void> => {
   const { getMessage, deleteMessage, moveToDlqMessage, executeMessage } = props;
-  const { failTimes, remainingTimes: remainingTimesConfig, signal, concurrency } = config;
+  const { failTimes, remainingTimes: remainingTimesConfig, signal } = config;
 
   const remainingTimes = remainingTimesConfig === undefined ? failTimes : remainingTimesConfig;
 
@@ -28,7 +28,6 @@ export const messagesFifoProcessor = async <T>(
       failTimes,
       remainingTimes: failTimes,
       signal,
-      concurrency,
     });
   } catch {
     if (remainingTimesConfig === 1) {
@@ -43,7 +42,6 @@ export const messagesFifoProcessor = async <T>(
       failTimes,
       remainingTimes: remainingTimes - 1,
       signal,
-      concurrency,
     });
   }
 };

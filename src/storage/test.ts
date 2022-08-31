@@ -121,8 +121,8 @@ describe('storage', () => {
       },
     });
     await db.deleteFirst();
-    const first = await db.getFirst();
-    expect(first).toMatchInlineSnapshot(`
+    const result = await db.getFirst();
+    expect(result).toMatchInlineSnapshot(`
       Object {
         "a": 333,
       }

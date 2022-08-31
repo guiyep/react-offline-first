@@ -6,7 +6,7 @@ export type KeyProp = {
   key: Key;
 };
 
-export type KeyValueProp<T> = {
+export type KeyValuePair<T> = {
   key: Key;
   value: T;
 };
@@ -20,10 +20,10 @@ export type ConditionProp<T> = (prop: T) => boolean;
 export type Storage<T> = {
   get: (props: KeyProp) => Promise<T>;
   delete: (props: KeyProp) => Promise<void>;
-  set: (props: KeyValueProp<T>) => Promise<unknown>;
+  set: (props: KeyValuePair<T>) => Promise<unknown>;
   find: (condition: ConditionProp<T>) => Promise<T[]>;
-  getFirst: (count: number) => Promise<T | null>;
-  deleteFirst: (count: number) => Promise<void>;
+  getFirst: () => Promise<T | null>;
+  deleteFirst: () => Promise<void>;
   hasAny: () => Promise<boolean>;
 };
 
